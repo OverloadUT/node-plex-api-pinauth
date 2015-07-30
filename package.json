@@ -1,0 +1,35 @@
+{
+  "name": "node-plex-api-pinauth",
+  "version": "0.0.1",
+  "description": "An authentication module for node-plex-api that provides an interface for authenticating with Plex using a PIN, like the official clients do.",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/overloadut/node-plex-api-pinauth.git"
+  },
+  "author": "Greg \"OverloadUT\" Laabs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/overloadut/node-plex-api-pinauth/issues"
+  },
+  "homepage": "https://github.com/overloadut/node-plex-api-pinauth#readme",
+  "dependencies": {
+    "plex-api-headers": "^1.1.0",
+    "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "coveralls": "^2.11.3",
+    "grunt": "^0.4.5",
+    "grunt-mocha-istanbul": "^2.4.0",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-shell": "^1.1.2",
+    "istanbul": "^0.3.17",
+    "mocha": "^2.2.5",
+    "plex-api": "^3.1.0"
+  }
+}
