@@ -1,6 +1,5 @@
 'use strict';
 
-var util = require('util');
 var request = require('request');
 var headers = require('plex-api-headers');
 var Q = require('q');
@@ -10,8 +9,6 @@ var rxPinID = /<id type="integer">([0-9]+)<\/id>/i;
 var rxAuthTokenFromPin = /<auth_token>([0-9A-Z]+)<\/auth_token>/i;
 
 function PinAuthenticator(token) {
-    EventEmitter.call(this);
-
     this.token = token;
 }
 
