@@ -32,7 +32,7 @@ exports.plexAPIStubs = function() {
 
             this.plexAPI = new PlexAPI({
                 hostname: "MOCHA_STUB_HOSTNAME",
-                authenticator: this.module
+                authenticator: {authenticate: function() {throw new Error("Error in Mocha test: plexAPI.authenticator not set")}}
             });
 
         } else if (process.env.NODE_ENV === 'test-live'){
@@ -41,7 +41,7 @@ exports.plexAPIStubs = function() {
 
             this.plexAPI = new PlexAPI({
                 hostname: "192.168.0.1",
-                authenticator: this.module
+                authenticator: {authenticate: function() {throw new Error("Error in Mocha test: plexAPI.authenticator not set")}}
             });
 
             this.plexAPIUtils.construct();
