@@ -43,7 +43,6 @@ module.exports = function(grunt) {
         });
     });
 
-    grunt.loadNpmTasks('grunt-aws-lambda');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-mocha-istanbul');

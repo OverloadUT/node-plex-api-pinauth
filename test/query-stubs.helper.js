@@ -24,35 +24,33 @@ exports.plexAPIStubs = function() {
                 self.plexAPIStubs.find = function () {};
             }
         };
+    });
 
+    beforeEach('Reset all plex-api stubs', function() {
         if(process.env.NODE_ENV === 'test') {
             var PlexAPI = this.plexAPIUtils.construct;
-
-            this.module = require('../index.js')();
-
             this.plexAPI = new PlexAPI({
                 hostname: "MOCHA_STUB_HOSTNAME",
                 authenticator: {authenticate: function() {throw new Error("Error in Mocha test: plexAPI.authenticator not set")}}
             });
 
+
         } else if (process.env.NODE_ENV === 'test-live'){
             var PlexAPI = require("plex-api");
-            this.module = require('../index.js')();
-
             this.plexAPI = new PlexAPI({
                 hostname: "192.168.0.1",
                 authenticator: {authenticate: function() {throw new Error("Error in Mocha test: plexAPI.authenticator not set")}}
             });
 
             this.plexAPIUtils.construct();
-        }
-    });
 
-    beforeEach('Reset all plex-api stubs', function() {
+        }
+
         this.plexAPIUtils.stubAll();
     });
 
     afterEach('Restore all plex-api stubs to blank methods', function() {
         this.plexAPIUtils.restoreAll();
+        delete this.plexAPI;
     });
 };
