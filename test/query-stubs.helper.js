@@ -1,9 +1,9 @@
-var proxyquire = require('proxyquire');
 var sinon = require('sinon');
 
 exports.plexAPIStubs = function() {
     before('set up main module with stubs for all plex-api methods', function () {
         var self = this;
+
         this.plexAPIStubs = null;
         this.plexAPIUtils = {
             stubAll      : function () {
@@ -22,6 +22,15 @@ exports.plexAPIStubs = function() {
                 self.plexAPIStubs.postQuery = function () {};
                 self.plexAPIStubs.perform = function () {};
                 self.plexAPIStubs.find = function () {};
+                self.plexAPIStubs.options = {
+                    'identifier': 'NOD_PLEX_API_PINAUTH_MOCHA_TESTS_UUID',
+                    'product': 'node-plex-api-pinauth mocha tests',
+                    'version': '1.0',
+                    'device': 'Node',
+                    'deviceName': 'Node.js App',
+                    'platform': 'Node.js',
+                    'platformVersion': process.version
+                }
             }
         };
     });
@@ -33,9 +42,7 @@ exports.plexAPIStubs = function() {
                 hostname: "MOCHA_STUB_HOSTNAME",
                 authenticator: {authenticate: function() {throw new Error("Error in Mocha test: plexAPI.authenticator not set")}}
             });
-
-
-        } else if (process.env.NODE_ENV === 'test-live'){
+        } else if (process.env.NODE_ENV === 'test-live') {
             var PlexAPI = require("plex-api");
             this.plexAPI = new PlexAPI({
                 hostname: "192.168.0.1",

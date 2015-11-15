@@ -32,7 +32,7 @@ PinAuthenticator.prototype.initialize = function initialize(plexApi) {
 };
 
 PinAuthenticator.prototype.getNewPin = function getNewPin() {
-    return requestPin().then(extractPin);
+    return requestPin(this.plexApi).then(extractPin);
 };
 
 PinAuthenticator.prototype.checkPinForAuth = function checkPinForAuth(pin) {
@@ -45,7 +45,7 @@ PinAuthenticator.prototype.checkPinForAuth = function checkPinForAuth(pin) {
     });
 };
 
-function requestPin() {
+function requestPin(plexApi) {
     var deferred = Q.defer(); // TODO remove promises
     var options = {
         url: 'https://plex.tv/pins.xml',
