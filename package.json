@@ -1,5 +1,5 @@
 {
-  "name": "node-plex-api-pinauth",
+  "name": "plex-api-pinauth",
   "version": "0.1.0",
   "description": "An authentication module for node-plex-api that provides an interface for authenticating with Plex using a PIN, like the official clients do.",
   "main": "index.js",
