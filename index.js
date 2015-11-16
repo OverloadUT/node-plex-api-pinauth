@@ -35,13 +35,32 @@ PinAuthenticator.prototype.getNewPin = function getNewPin() {
     return requestPin(this.plexApi).then(extractPin);
 };
 
-PinAuthenticator.prototype.checkPinForAuth = function checkPinForAuth(pin) {
+// Resolves with a string representing the current state of the provided PIN
+// 'authorized': the PIN has been granted auth, and we have a token and are ready to go!
+// 'waiting': the PIN has not been granted auth yet
+// 'invalid': the PIN is no longer valid
+// TODO I hate pretty much everything about this - strings to represent state, the way it gets data from requestAuthFromPin, etc. There's got to be a better way.
+// TODO this uses a callback, but getNewPin uses a promise. Pick one! OR support both?
+PinAuthenticator.prototype.checkPinForAuth = function checkPinForAuth(pin, callback) {
     if (typeof(pin) == 'object') {
         pin = pin.id;
     }
 
-    return requestAuthFromPin(pin).then(function(xmlBody) {
-
+    var self = this;
+    requestAuthFromPin(this.plexApi, pin).then(function(authResponse){
+        if(authResponse === '404') {
+            callback(null, 'invalid');
+        } else {
+            var token = extractAuthToken(authResponse);
+            if (token) {
+                self.token = token;
+                callback(null, 'authorized');
+            } else {
+                callback(null, 'waiting');
+            }
+        }
+    }).catch(function(error){
+        callback(new Error('Error in requestAuthFromPin', error));
     });
 };
 
@@ -54,10 +73,10 @@ function requestPin(plexApi) {
 
     request.post(options, function(err, res, xmlBody) {
         if (err) {
-            return deferred.reject(new Error('Error while requesting https://plex.tv for authentication: ' + String(err)));
+            return deferred.reject(new Error('Error while requesting plex.tv for a new pin: ' + String(err)));
         }
         if (res.statusCode !== 201) {
-            return deferred.reject(new Error('Invalid status code in authentication response from Plex.tv, expected 201 but got ' + res.statusCode));
+            return deferred.reject(new Error('Tried to request a PIN from plex.tv, but got an unexpected status code: expected 201 but got ' + res.statusCode));
         }
         deferred.resolve(xmlBody);
     });
@@ -65,35 +84,43 @@ function requestPin(plexApi) {
     return deferred.promise;
 }
 
-function requestAuthFromPin(pinId) {
+// Resolves with either the XML body, or a string '404'
+function requestAuthFromPin(plexApi, pinId) {
     var deferred = Q.defer();
     var options = {
         url: 'https://plex.tv/pins/' + pinId + '.xml',
         headers: headers(plexApi)
     };
 
-    // TODO how does this response work before auth is granted
+    var response = {};
+
+    // 404: Not a valid PIN (or expired)
     request.get(options, function(err, res, xmlBody) {
         if (err) {
-            return deferred.reject(new Error('Error while requesting https://plex.tv for authentication: ' + String(err)));
+            return deferred.reject(new Error('Error while checking the PIN for authentication via plex.tv: ' + String(err)));
         }
-        if (res.statusCode !== 200) {
+        if (res.statusCode === 404) {
+            return deferred.resolve('404');
+        }
+        if (res.statusCode < 200 || res.statusCode >= 300) {
             return deferred.reject(new Error('Invalid status code in authentication response from Plex.tv, expected 201 but got ' + res.statusCode));
         }
-        deferred.resolve(xmlBody);
+        return deferred.resolve(xmlBody);
     });
 
     return deferred.promise;
 }
 
-function extractAuthTokenFromPin(xmlBody) {
+function extractAuthToken(xmlBody) {
     var tokenMatches = xmlBody.match(rxAuthTokenFromPin);
     if (!tokenMatches) {
-        throw new Error('Couldnt not find authentication token in the Pin response from Plex.tv');
+        return false;
     }
     return tokenMatches[1];
 }
 
+// TODO this function throws (because promises) but the extractAuthToken returns false if it can't find a match
+// It should be consistent
 function extractPin(xmlBody) {
     var pinCodeMatches = xmlBody.match(rxPinCode);
     if (!pinCodeMatches) {
