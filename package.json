@@ -1,6 +1,6 @@
 {
   "name": "node-plex-api-pinauth",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "An authentication module for node-plex-api that provides an interface for authenticating with Plex using a PIN, like the official clients do.",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,9 @@
     "q": "^1.4.1",
     "request": "^2.61.0"
   },
+  "peerDependencies": {
+    "plex-api": "^3.2.0"
+  },
   "devDependencies": {
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
@@ -32,8 +35,7 @@
     "grunt-shell": "^1.1.2",
     "istanbul": "^0.3.18",
     "mocha": "^2.2.5",
-    "plex-api": "^3.1.0",
-    "proxyquire": "^1.7.1",
+    "plex-api": "^3.2.0",
     "sinon": "^1.16.1",
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0"
