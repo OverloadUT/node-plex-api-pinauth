@@ -11,9 +11,12 @@ const plexClient = new Plex(plexIp);
 const plexPin = new PlexPin(plexClient);
 
 /*
+ * Get a PIN
+ *
+ * The following code retrieves a PIN and waits for the user to enter the PIN on plex.tv so a token can be retrieved.
+ * A PIN is valid for 15 minutes and after that this script will timeout.
  *
  */
-/*
 plexPin.getPin().then(pin =>
 {
 	// print pin
@@ -48,9 +51,14 @@ plexPin.getPin().then(pin =>
 	}, 2000);
 })
 .catch(err => console.error(err.message));
-*/
 
 
+/*
+ * Get a token
+ *
+ * If you only wish to verify a PIN, use the following script
+ *
+ */
 plexPin.getToken(6566262696).then(res => // fake PIN
 {
 	// success getting token
