@@ -2,43 +2,80 @@
 An authentication module for [node-plex-api](https://github.com/phillipj/node-plex-api) that handles the API requests necessary for getting an auth token using a PIN.
 
 
-## Current State
-It's usable, but it's ugly. One of the public methods returns a promise while the other uses a callback. That's dumb.
-There are other dumb things too that need to be cleaned up.
- 
-But it works!
-
-Pull requests are very welcome.
-
 ## Usage
+
+The following code retrieves a PIN and waits for the user to enter the PIN on plex.tv so a token can be retrieved.
+A PIN is valid for 15 minutes and after that this script will timeout.
+
 ```js
-var plexApi = require('plex-api');
-var plexPinAuth = require('plex-api-pinauth')();
+const PlexPin = require('./index');
+const Plex = require('plex-api');
 
-var plexClient = new PlexAPI({
-    hostname: '192.168.0.1',
-    authenticator: plexPinAuth
-});
 
-// Use getNewPin to get a new PIN object with these parameters:
-// code: The 4-digit PIN that the user should enter on https://plex.tv/pin to grant authorization
-// id: the ID of the PIN, which you'll need to use when checking if we have authorization yet
-plexPinAuth.getNewPin().then(function(pinObj){
-    console.log(pinObj)
-    // {code: 'ABCD', id: '12345678'}
-});
+/*
+ * CONFIG
+ */
+let plexIp = '192.168.0.5';
 
-// Use checkPinForAuth to check to see if the user has entered the PIN on the website yet.
-// returns a string representing 3 possible results:
-// "authorized": The user has granted authorization and we now have the token. You can use plexClient now.
-// "waiting": The user has not yet granted authorization.
-// "invalid": The PIN is no longer (or never was) valid. PINs only remain valid for about 10 minutes.
-plexPinAuth.checkPinForAuth(pinObj, function callback(err, status) {
-    if(err) {
-        // uh oh
-    } else {
-        console.log(status);
-        // "authorized"
-    }
-});
+const plexClient = new Plex(plexIp);
+const plexPin = new PlexPin(plexClient);
+
+
+/*
+ * Get a PIN
+ */
+plexPin.getPin().then(pin =>
+{
+	// print pin
+	console.log(pin.code);
+	
+	// get token
+	let ping = setTimeout(function pollToken()
+	{
+		plexPin.getToken(pin.id)
+			.then(res =>
+			{
+				// success getting token
+				if (res.token === true)
+				{
+					console.log(res['auth-token']);
+					return;
+				}
+				
+				// failed getting token
+				else if (res.token === false)
+				{
+					console.error('Timeout!');
+					return;
+				}
+				
+				// polling
+				else
+					ping = setTimeout(pollToken, 1000);
+			})
+			.catch(err => console.error(JSON.stringify(err)));
+		
+	}, 2000);
+})
+.catch(err => console.error(err.message));
+```
+
+If you only wish to verify a PIN, use the following script:
+
+```js
+plexPin.getToken(6566262696).then(res => // fake PIN
+{
+	// success getting token
+	if (res.token === true)
+		console.log(res['auth-token']);
+	
+	// failed getting token
+	else if (res.token === false)
+		console.error('Timeout!');
+	
+	// polling
+	else
+		console.error('No token found!');
+})
+.catch(err => console.error(err.message));
 ```
