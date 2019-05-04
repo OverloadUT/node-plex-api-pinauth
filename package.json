@@ -17,27 +17,12 @@
   },
   "homepage": "https://github.com/overloadut/node-plex-api-pinauth#readme",
   "dependencies": {
+    "fast-xml-parser": "^3.12.16",
     "plex-api-headers": "^1.1.0",
-    "q": "^1.4.1",
-    "request": "^2.61.0"
+    "request-promise": "^4.2.4"
   },
   "peerDependencies": {
-    "plex-api": "^3.2.0"
+    "plex-api": "^5.2.2"
   },
-  "devDependencies": {
-    "chai": "^3.2.0",
-    "chai-as-promised": "^5.1.0",
-    "coveralls": "^2.11.3",
-    "dotenv": "^1.2.0",
-    "grunt": "^0.4.5",
-    "grunt-mocha-istanbul": "^3.0.1",
-    "grunt-mocha-test": "^0.12.7",
-    "grunt-shell": "^1.1.2",
-    "istanbul": "^0.3.18",
-    "mocha": "^2.2.5",
-    "plex-api": "^3.2.0",
-    "sinon": "^1.16.1",
-    "sinon-as-promised": "^4.0.0",
-    "sinon-chai": "^2.8.0"
-  }
+  "devDependencies": {}
 }
