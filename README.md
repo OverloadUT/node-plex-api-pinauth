@@ -9,16 +9,19 @@ A PIN is valid for 15 minutes and after that this script will timeout.
 
 ```js
 const PlexPin = require('./index');
-const Plex = require('plex-api');
-
 
 /*
  * CONFIG
  */
-let plexIp = '192.168.0.5';
+const plexOptions = {
+	identifier: '123-ABC-456-DEF-789',
+	product: 'Your Product',
+	version: '1.0',
+	deviceName: 'Device Name',
+	platform: 'Platform Name'
+};
 
-const plexClient = new Plex(plexIp);
-const plexPin = new PlexPin(plexClient);
+const plexPin = new PlexPin(plexOptions);
 
 
 /*

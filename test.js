@@ -1,14 +1,18 @@
 const PlexPin = require('./index');
-const Plex = require('plex-api');
 
 
 /*
  * CONFIG
  */
-let plexIp = '192.168.178.5';
+const plexOptions = {
+	identifier: '123-ABC-456-DEF-789',
+	product: 'Your Product',
+	version: '1.0',
+	deviceName: 'Device Name',
+	platform: 'Platform Name'
+};
 
-const plexClient = new Plex(plexIp);
-const plexPin = new PlexPin(plexClient);
+const plexPin = new PlexPin(plexOptions);
 
 /*
  * Get a PIN
@@ -59,6 +63,7 @@ plexPin.getPin().then(pin =>
  * If you only wish to verify a PIN, use the following script
  *
  */
+/*
 plexPin.getToken(6566262696).then(res => // fake PIN
 {
 	// success getting token
@@ -74,3 +79,4 @@ plexPin.getToken(6566262696).then(res => // fake PIN
 		console.error('No token found!');
 })
 .catch(err => console.error(err.message));
+*/

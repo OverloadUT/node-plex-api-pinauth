@@ -1,28 +1,32 @@
 {
   "name": "plex-api-pinauth",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "An authentication module for node-plex-api that provides an interface for authenticating with Plex using a PIN, like the official clients do.",
   "main": "index.js",
   "scripts": {
-    "test": "grunt coveralls"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/overloadut/node-plex-api-pinauth.git"
+    "url": "git+https://github.com/Zefau/node-plex-api-pinauth.git"
   },
-  "author": "Greg \"OverloadUT\" Laabs",
+  "author": "Zefau",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/overloadut/node-plex-api-pinauth/issues"
+    "url": "https://github.com/Zefau/node-plex-api-pinauth/issues"
   },
-  "homepage": "https://github.com/overloadut/node-plex-api-pinauth#readme",
+  "homepage": "https://github.com/Zefau/node-plex-api-pinauth#readme",
   "dependencies": {
-    "fast-xml-parser": "^3.12.16",
-    "plex-api-headers": "^1.1.0",
+    "fast-xml-parser": "^3.12.20",
+    "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
-  "peerDependencies": {
-    "plex-api": "^5.2.2"
-  },
+  "peerDependencies": {},
+  "keywords": [
+    "plex",
+    "pin",
+    "token",
+    "authentication"
+  ],
   "devDependencies": {}
 }
